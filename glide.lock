@@ -1,5 +1,5 @@
-hash: 182fbb7e85303115a78f13d6cbd3e71caea139faca52ebc9aa85dc256b805b8a
-updated: 2017-07-29T17:09:23.420528308+03:00
+hash: f674caba0305c812d088118a5ca40d4d2465a1939130e19798cf2d212142c5fb
+updated: 2017-11-08T17:29:06.831580298+01:00
 imports:
 - name: github.com/beorn7/perks
   version: 4c0e84591b9aa9e6dcfdf3e020114cd81f89d5f9
@@ -11,10 +11,12 @@ imports:
   version: 37d7f8432a3e684eef9b2edece76bdfa6ac85b39
 - name: github.com/codeskyblue/go-sh
   version: b097669b1569203c3ce05a6b8717d43140fdb3d5
+- name: github.com/coreos/bbolt
+  version: 3c6cbfb299c11444eb2f8c9d48f0d2ce09157423
 - name: github.com/dustin/go-humanize
   version: 259d2a102b871d17f30e3cd9881a642961a1e486
 - name: github.com/go-chi/chi
-  version: b8567b6442e27704bfeb725095091581cbe82a00
+  version: f7c66f685bcab06bcce78ac212c5f3553c063d19
   subpackages:
   - middleware
 - name: github.com/go-chi/render
