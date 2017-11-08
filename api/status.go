@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
-	"github.com/stefanprodan/mgob/db"
+	"github.com/vtomasr5/mgob/db"
 )
 
 type appStatus []*db.Status

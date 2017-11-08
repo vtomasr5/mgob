@@ -10,7 +10,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/pkg/sftp"
-	"github.com/stefanprodan/mgob/config"
+	"github.com/vtomasr5/mgob/config"
 	"golang.org/x/crypto/ssh"
 )
 

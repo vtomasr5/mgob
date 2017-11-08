@@ -10,9 +10,9 @@ import (
 	"github.com/dustin/go-humanize"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
-	"github.com/stefanprodan/mgob/backup"
-	"github.com/stefanprodan/mgob/config"
-	"github.com/stefanprodan/mgob/notifier"
+	"github.com/vtomasr5/mgob/backup"
+	"github.com/vtomasr5/mgob/config"
+	"github.com/vtomasr5/mgob/notifier"
 )
 
 func configCtx(data config.AppConfig) func(next http.Handler) http.Handler {

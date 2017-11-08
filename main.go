@@ -8,11 +8,11 @@ import (
 	"syscall"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/stefanprodan/mgob/api"
-	"github.com/stefanprodan/mgob/backup"
-	"github.com/stefanprodan/mgob/config"
-	"github.com/stefanprodan/mgob/db"
-	"github.com/stefanprodan/mgob/scheduler"
+	"github.com/vtomasr5/mgob/api"
+	"github.com/vtomasr5/mgob/backup"
+	"github.com/vtomasr5/mgob/config"
+	"github.com/vtomasr5/mgob/db"
+	"github.com/vtomasr5/mgob/scheduler"
 )
 
 var version = "undefined"

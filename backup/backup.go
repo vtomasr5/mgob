@@ -9,7 +9,7 @@ import (
 	"github.com/Sirupsen/logrus"
 	"github.com/codeskyblue/go-sh"
 	"github.com/pkg/errors"
-	"github.com/stefanprodan/mgob/config"
+	"github.com/vtomasr5/mgob/config"
 )
 
 func Run(plan config.Plan, tmpPath string, storagePath string) (Result, error) {

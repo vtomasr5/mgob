@@ -8,7 +8,7 @@ import (
 
 	"github.com/codeskyblue/go-sh"
 	"github.com/pkg/errors"
-	"github.com/stefanprodan/mgob/config"
+	"github.com/vtomasr5/mgob/config"
 )
 
 func dump(plan config.Plan, tmpPath string, ts time.Time) (string, string, error) {

@@ -1,4 +1,4 @@
-package: github.com/stefanprodan/mgob
+package: github.com/vtomasr5/mgob
 import:
 - package: github.com/Sirupsen/logrus
   version: ^0.11.5

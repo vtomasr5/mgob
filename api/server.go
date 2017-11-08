@@ -7,8 +7,8 @@ import (
 	"github.com/Sirupsen/logrus"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/stefanprodan/mgob/config"
-	"github.com/stefanprodan/mgob/db"
+	"github.com/vtomasr5/mgob/config"
+	"github.com/vtomasr5/mgob/db"
 	"strings"
 )
 

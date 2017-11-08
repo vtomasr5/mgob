@@ -8,11 +8,11 @@ import (
 	"github.com/dustin/go-humanize"
 	"github.com/pkg/errors"
 	"github.com/robfig/cron"
-	"github.com/stefanprodan/mgob/backup"
-	"github.com/stefanprodan/mgob/config"
-	"github.com/stefanprodan/mgob/db"
-	"github.com/stefanprodan/mgob/metrics"
-	"github.com/stefanprodan/mgob/notifier"
+	"github.com/vtomasr5/mgob/backup"
+	"github.com/vtomasr5/mgob/config"
+	"github.com/vtomasr5/mgob/db"
+	"github.com/vtomasr5/mgob/metrics"
+	"github.com/vtomasr5/mgob/notifier"
 )
 
 type Scheduler struct {

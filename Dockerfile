@@ -6,10 +6,10 @@ ARG VERSION
 LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.name="mgob" \
       org.label-schema.description="MongoDB backup automation tool" \
-      org.label-schema.url="https://github.com/stefanprodan/mgob" \
+      org.label-schema.url="https://github.com/vtomasr5/mgob" \
       org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.vcs-url="https://github.com/stefanprodan/mgob" \
-      org.label-schema.vendor="stefanprodan.com" \
+      org.label-schema.vcs-url="https://github.com/vtomasr5/mgob" \
+      org.label-schema.vendor="vtomasr5.com" \
       org.label-schema.version=$VERSION \
       org.label-schema.schema-version="1.0"
 

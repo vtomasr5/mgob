@@ -4,7 +4,7 @@ APP_VERSION?=0.7
 
 # build vars
 BUILD_DATE:=$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
-REPOSITORY:=stefanprodan
+REPOSITORY:=vtomasr5
 
 #run vars
 CONFIG:=$$(pwd)/test/config

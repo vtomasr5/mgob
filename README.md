@@ -1,7 +1,7 @@
 # mgob
 
-[![Build Status](https://travis-ci.org/stefanprodan/mgob.svg?branch=master)](https://travis-ci.org/stefanprodan/mgob)
-[![Docker Image](https://images.microbadger.com/badges/image/stefanprodan/mgob:edge.svg)](https://hub.docker.com/r/stefanprodan/mgob/)
+[![Build Status](https://travis-ci.org/vtomasr5/mgob.svg?branch=master)](https://travis-ci.org/vtomasr5/mgob)
+[![Docker Image](https://images.microbadger.com/badges/image/vtomasr5/mgob:edge.svg)](https://hub.docker.com/r/vtomasr5/mgob/)
 
 MGOB is a MongoDB backup automation tool built with golang.
 
@@ -18,12 +18,12 @@ MGOB is a MongoDB backup automation tool built with golang.
 
 #### Install
 
-MGOB is available on Docker Hub at [stefanprodan/mgob](https://hub.docker.com/r/stefanprodan/mgob/). 
+MGOB is available on Docker Hub at [vtomasr5/mgob](https://hub.docker.com/r/vtomasr5/mgob/). 
 
 Supported tags:
 
-* `stefanprodan/mgob:latest` latest stable [release](https://github.com/stefanprodan/mgob/releases)
-* `stefanprodan/mgob:edge` master branch latest successful [build](https://travis-ci.org/stefanprodan/mgob)
+* `vtomasr5/mgob:latest` latest stable [release](https://github.com/vtomasr5/mgob/releases)
+* `vtomasr5/mgob:edge` master branch latest successful [build](https://travis-ci.org/vtomasr5/mgob)
 
 Run:
 
@@ -33,7 +33,7 @@ docker run -dp 8090:8090 --name mgob \
     -v "/mogb/storage:/storage" \
     -v "/mgob/tmp:/tmp" \
     -v "/mgob/data:/data" \
-    stefanprodan/mgob \
+    vtomasr5/mgob \
     -LogLevel=info
 ```
 

@@ -8,7 +8,7 @@ import (
 	"net/http"
 
 	"github.com/pkg/errors"
-	"github.com/stefanprodan/mgob/config"
+	"github.com/vtomasr5/mgob/config"
 )
 
 type slackPayload struct {
