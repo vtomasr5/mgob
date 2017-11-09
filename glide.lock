@@ -5,8 +5,6 @@ imports:
   version: 4c0e84591b9aa9e6dcfdf3e020114cd81f89d5f9
   subpackages:
   - quantile
-- name: github.com/boltdb/bolt
-  version: 2f1ce7a837dcb8da3ec595b1dac9d0632f0f99e8
 - name: github.com/codegangsta/inject
   version: 37d7f8432a3e684eef9b2edece76bdfa6ac85b39
 - name: github.com/codeskyblue/go-sh
@@ -73,4 +71,6 @@ imports:
   version: 3f83fa5005286a7fe593b055f0d7771a7dce4655
 - name: gopkg.in/yaml.v2
   version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
+- name: github.com/spf13/cobra
+  version: f63432717259fda2ff0da668dccdfaa3de837ee6
 testImports: []

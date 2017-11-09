@@ -23,9 +23,11 @@ import:
 - package: golang.org/x/crypto
   subpackages:
   - ssh
-- package: github.com/boltdb/bolt
+- package: github.com/coreos/bbolt
   version: ^1.3.0
 - package: github.com/go-chi/chi
   version: ^3.1.4
 - package: github.com/go-chi/render
   version: ^1.0.0
+- packages: github.com/spf13/cobra
+  version: f63432717259fda2ff0da668dccdfaa3de837ee6
