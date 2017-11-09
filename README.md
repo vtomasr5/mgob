@@ -3,7 +3,9 @@
 [![Build Status](https://travis-ci.org/vtomasr5/mgob.svg?branch=master)](https://travis-ci.org/vtomasr5/mgob)
 [![Docker Image](https://images.microbadger.com/badges/image/vtomasr5/mgob:edge.svg)](https://hub.docker.com/r/vtomasr5/mgob/)
 
-MGOB is a MongoDB backup automation tool built with golang.
+MGOB is a MongoDB backup automation tool built with golang. 
+
+ALL CREDITS GO TO THE ORIGINAL AUTHOR AND HIS REPO https://github.com/stefanprodan/mgob
 
 #### Features
 
