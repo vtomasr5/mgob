@@ -3,13 +3,13 @@ package api
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/vtomasr5/mgob/config"
 	"github.com/vtomasr5/mgob/db"
-	"strings"
 )
 
 type HttpServer struct {
@@ -18,7 +18,6 @@ type HttpServer struct {
 }
 
 func (s *HttpServer) Start(version string) {
-
 	r := chi.NewRouter()
 	r.Use(middleware.Recoverer)
 	if s.Config.LogLevel == "debug" {
@@ -44,7 +43,7 @@ func (s *HttpServer) Start(version string) {
 		r.Post("/{planID}", postBackup)
 	})
 
-	FileServer(r,"/storage", http.Dir(s.Config.StoragePath))
+	FileServer(r, "/storage", http.Dir(s.Config.StoragePath))
 
 	logrus.Error(http.ListenAndServe(fmt.Sprintf(":%v", s.Config.Port), r))
 }

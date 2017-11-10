@@ -36,7 +36,6 @@ func NewStatusStore(store *Store) (*StatusStore, error) {
 
 // Put upserts job status
 func (db *StatusStore) Put(status *Status) error {
-
 	buf, err := json.Marshal(status)
 	if err != nil {
 		return errors.Wrap(err, "Status store json marshal failed")

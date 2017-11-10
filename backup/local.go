@@ -12,9 +12,8 @@ import (
 )
 
 func dump(plan config.Plan, tmpPath string, ts time.Time) (string, string, error) {
-
-	archive := fmt.Sprintf("%v/%v-%v.gz", tmpPath, plan.Name, ts.Unix())
-	log := fmt.Sprintf("%v/%v-%v.log", tmpPath, plan.Name, ts.Unix())
+	archive := fmt.Sprintf("%v/%v-%v.gz", tmpPath, plan.Name, ts.Format("2006-01-02T15:04:05"))
+	log := fmt.Sprintf("%v/%v-%v.log", tmpPath, plan.Name, ts.Format("2006-01-02T15:04:05"))
 
 	dump := fmt.Sprintf("mongodump --archive=%v --gzip --host %v --port %v --db %v ",
 		archive, plan.Target.Host, plan.Target.Port, plan.Target.Database)

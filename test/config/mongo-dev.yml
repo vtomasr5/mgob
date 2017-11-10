@@ -1,10 +1,10 @@
 target:
-  host: "172.18.7.40"
+  host: "127.0.0.1"
   port: 27017
-  database: "syros"
+  database: "mgob"
   username: ""
   password: ""
 scheduler:
-  cron: "*/3 * * * *"
+  cron: "*/1 * * * *"
   retention: 5
-  timeout: 1
+  timeout: 2

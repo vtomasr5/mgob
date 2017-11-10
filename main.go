@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/signal"
 	"path"
+	"path/filepath"
 	"syscall"
 
 	"github.com/Sirupsen/logrus"
@@ -15,7 +16,7 @@ import (
 	"github.com/vtomasr5/mgob/scheduler"
 )
 
-var version = "undefined"
+var version = "master~HEAD"
 
 func main() {
 	var appConfig = &config.AppConfig{}
@@ -41,12 +42,12 @@ func main() {
 	}
 	logrus.Info(info)
 
-	plans, err := config.LoadPlans(appConfig.ConfigPath)
+	plans, err := config.LoadPlans(filepath.Clean(appConfig.ConfigPath))
 	if err != nil {
 		logrus.Fatal(err)
 	}
 
-	store, err := db.Open(path.Join(appConfig.DataPath, "mgob.db"))
+	store, err := db.Open(path.Join(filepath.Clean(appConfig.DataPath), "mgob.db"))
 	if err != nil {
 		logrus.Fatal(err)
 	}

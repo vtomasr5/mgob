@@ -2,6 +2,7 @@ package scheduler
 
 import (
 	"fmt"
+	"path/filepath"
 	"time"
 
 	"github.com/Sirupsen/logrus"
@@ -45,7 +46,7 @@ func (s *Scheduler) Start() error {
 	}
 
 	s.Cron.AddFunc("0 0 */1 * *", func() {
-		backup.TmpCleanup(s.Config.TmpPath)
+		backup.TmpCleanup(filepath.Clean(s.Config.TmpPath))
 	})
 
 	s.Cron.Start()
@@ -85,7 +86,7 @@ func (b backupJob) Run() {
 	log := ""
 	t1 := time.Now()
 
-	res, err := backup.Run(b.plan, b.conf.TmpPath, b.conf.StoragePath)
+	res, err := backup.Run(b.plan, filepath.Clean(b.conf.TmpPath), filepath.Clean(b.conf.StoragePath))
 	if err != nil {
 		status = "500"
 		log = fmt.Sprintf("Backup failed %v", err)
