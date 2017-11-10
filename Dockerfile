@@ -9,7 +9,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.url="https://github.com/vtomasr5/mgob" \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url="https://github.com/vtomasr5/mgob" \
-      org.label-schema.vendor="vtomasr5.com" \
+      org.label-schema.vendor="vtomasr5" \
       org.label-schema.version=$VERSION \
       org.label-schema.schema-version="1.0"
 
@@ -18,7 +18,7 @@ ADD https://dl.minio.io/client/mc/release/linux-amd64/mc /usr/bin
 RUN chmod u+x /usr/bin/mc
 
 WORKDIR /root/
-COPY mgob    .
+COPY mgob .
 
 VOLUME ["/config", "/storage", "/tmp", "/data"]
 
