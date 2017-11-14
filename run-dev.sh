@@ -1,17 +1,12 @@
 #! /bin/bash
-#
-# run-test.sh
-# Copyright (C) 2017 vjuan <vtomasr5@gmail.com>
-#
-# Distributed under terms of the GPLv3 license.
 
 go install
 
-mkdir -p /tmp/config
-mkdir -p /tmp/data
-mkdir -p /tmp/storage
-mkdir -p /tmp/tmp
+mkdir -p /tmp/mgob/config
+mkdir -p /tmp/mgob/data
+mkdir -p /tmp/mgob/storage
+mkdir -p /tmp/mgob/tmp
 
-cp test/config/mongo-dev.yml /tmp/config/
+cp test/config/mongo-dev.yml /tmp/mgob/config/
 
-mgob -ConfigPath /tmp/config/ -DataPath /tmp/data/ -StoragePath /tmp/storage -TmpPath /tmp/tmp/
+mgob -ConfigPath /tmp/mgob/config/ -DataPath /tmp/mgob/data/ -StoragePath /tmp/mgob/storage -TmpPath /tmp/mgob/tmp/

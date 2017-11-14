@@ -24,8 +24,7 @@ _testmain.go
 *.prof
 mgob
 
-/.idea
-/test/storage/
-/test/tmp/
-/test/config/mongo-debug.yml
-/test/data/
+test/storage/
+test/tmp/
+test/config/mongo-dev.yml
+test/data/
