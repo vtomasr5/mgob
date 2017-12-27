@@ -14,13 +14,13 @@ import (
 func getURIHost(plan config.Plan) string {
 	var host string
 	if plan.Target.Type == "sharding" {
-		host = strings.Join(plan.Target.Host.Mongos, ",")
+		host = strings.Join(plan.Target.Backup.Host.Mongos, ",")
 	}
 	if plan.Target.Type == "replicaset" {
-		host = strings.Join(plan.Target.Host.Mongod, ",")
+		host = strings.Join(plan.Target.Backup.Host.Mongod, ",")
 	}
 	if plan.Target.Type == "standalone" {
-		host = plan.Target.Host.Mongod[0]
+		host = plan.Target.Backup.Host.Mongod[0]
 	}
 	return host
 }
@@ -32,11 +32,11 @@ func dump(plan config.Plan, tmpPath string, ts time.Time) (string, string, error
 	host := getURIHost(plan)
 
 	dump := fmt.Sprintf("mongodump --archive=%v --gzip --host %v ", archive, host)
-	if plan.Target.Database != "" {
-		dump += fmt.Sprintf("--db %v ", plan.Target.Database)
+	if plan.Target.Backup.Database != "" {
+		dump += fmt.Sprintf("--db %v ", plan.Target.Backup.Database)
 	}
-	if plan.Target.Username != "" && plan.Target.Password != "" {
-		dump += fmt.Sprintf("-u %v -p %v", plan.Target.Username, plan.Target.Password)
+	if plan.Target.Backup.Username != "" && plan.Target.Backup.Password != "" {
+		dump += fmt.Sprintf("-u %v -p %v", plan.Target.Backup.Username, plan.Target.Backup.Password)
 	}
 	fmt.Println("COMMAND: ", dump)
 	output, err := sh.Command("/bin/sh", "-c", dump).SetTimeout(time.Duration(plan.Scheduler.Timeout) * time.Minute).CombinedOutput()

@@ -22,10 +22,15 @@ type Plan struct {
 }
 
 type Target struct {
+	Type    string  `yaml:"type"`
+	Backup  Backup  `yaml:"backup"`
+	Restore Restore `yaml:"restore"`
+}
+
+type Backup struct {
 	Database string `yaml:"database"`
 	Host     Host   `yaml:"host"`
 	Password string `yaml:"password"`
-	// Port     int    `yaml:"port"`
 	Username string `yaml:"username"`
 	Type     string `yaml:"type"`
 }
@@ -34,7 +39,6 @@ type Restore struct {
 	Database string `yaml:"database"`
 	Host     Host   `yaml:"host"`
 	Password string `yaml:"password"`
-	// Port     int    `yaml:"port"`
 	Username string `yaml:"username"`
 	Type     string `yaml:"type"`
 }
