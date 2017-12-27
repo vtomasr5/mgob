@@ -18,7 +18,9 @@ func sftpUpload(file string, plan config.Plan) (string, error) {
 	t1 := time.Now()
 	sshConf := &ssh.ClientConfig{
 		User: plan.SFTP.Username,
-		Auth: []ssh.AuthMethod{ssh.Password(plan.SFTP.Password)},
+		Auth: []ssh.AuthMethod{
+			ssh.Password(plan.SFTP.Password),
+		},
 		HostKeyCallback: func(hostname string, remote net.Addr, key ssh.PublicKey) error {
 			return nil
 		},

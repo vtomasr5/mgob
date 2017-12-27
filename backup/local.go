@@ -6,21 +6,39 @@ import (
 	"strings"
 	"time"
 
-	"github.com/codeskyblue/go-sh"
+	sh "github.com/codeskyblue/go-sh"
 	"github.com/pkg/errors"
 	"github.com/vtomasr5/mgob/config"
 )
+
+func getURIHost(plan config.Plan) string {
+	var host string
+	if plan.Target.Type == "sharding" {
+		host = strings.Join(plan.Target.Host.Mongos, ",")
+	}
+	if plan.Target.Type == "replicaset" {
+		host = strings.Join(plan.Target.Host.Mongod, ",")
+	}
+	if plan.Target.Type == "standalone" {
+		host = plan.Target.Host.Mongod[0]
+	}
+	return host
+}
 
 func dump(plan config.Plan, tmpPath string, ts time.Time) (string, string, error) {
 	archive := fmt.Sprintf("%v/%v-%v.gz", tmpPath, plan.Name, ts.Format("2006-01-02T15:04:05"))
 	log := fmt.Sprintf("%v/%v-%v.log", tmpPath, plan.Name, ts.Format("2006-01-02T15:04:05"))
 
-	dump := fmt.Sprintf("mongodump --archive=%v --gzip --host %v --port %v --db %v ",
-		archive, plan.Target.Host, plan.Target.Port, plan.Target.Database)
+	host := getURIHost(plan)
+
+	dump := fmt.Sprintf("mongodump --archive=%v --gzip --host %v ", archive, host)
+	if plan.Target.Database != "" {
+		dump += fmt.Sprintf("--db %v ", plan.Target.Database)
+	}
 	if plan.Target.Username != "" && plan.Target.Password != "" {
 		dump += fmt.Sprintf("-u %v -p %v", plan.Target.Username, plan.Target.Password)
 	}
-
+	fmt.Println("COMMAND: ", dump)
 	output, err := sh.Command("/bin/sh", "-c", dump).SetTimeout(time.Duration(plan.Scheduler.Timeout) * time.Minute).CombinedOutput()
 	if err != nil {
 		ex := ""

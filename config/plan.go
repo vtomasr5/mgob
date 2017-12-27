@@ -12,7 +12,8 @@ import (
 
 type Plan struct {
 	Name      string    `yaml:"name"`
-	Target    Target    `yaml:"target"`
+	Target    Target    `yaml:"target"`  // backup from
+	Restore   Restore   `yaml:"restore"` // restore to
 	Scheduler Scheduler `yaml:"scheduler"`
 	S3        *S3       `yaml:"s3"`
 	SFTP      *SFTP     `yaml:"sftp"`
@@ -22,10 +23,26 @@ type Plan struct {
 
 type Target struct {
 	Database string `yaml:"database"`
-	Host     string `yaml:"host"`
+	Host     Host   `yaml:"host"`
 	Password string `yaml:"password"`
-	Port     int    `yaml:"port"`
+	// Port     int    `yaml:"port"`
 	Username string `yaml:"username"`
+	Type     string `yaml:"type"`
+}
+
+type Restore struct {
+	Database string `yaml:"database"`
+	Host     Host   `yaml:"host"`
+	Password string `yaml:"password"`
+	// Port     int    `yaml:"port"`
+	Username string `yaml:"username"`
+	Type     string `yaml:"type"`
+}
+
+type Host struct {
+	Mongod []string `yaml:"mongod"`
+	Mongos []string `yaml:"mongos"`
+	Mongoc []string `yaml:"mongoc"`
 }
 
 type Scheduler struct {
