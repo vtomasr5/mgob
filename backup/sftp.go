@@ -3,6 +3,7 @@ package backup
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"time"
@@ -52,6 +53,7 @@ func (s SSHClient) Command(cmd string) error {
 	return nil
 }
 
+// TODO: replace ssh connection
 func sftpUpload(file string, plan config.Plan) (string, error) {
 	t1 := time.Now()
 	sshCon, err := NewSSHClient(plan)
@@ -73,7 +75,7 @@ func sftpUpload(file string, plan config.Plan) (string, error) {
 	defer f.Close()
 
 	_, fname := filepath.Split(file)
-	dstPath := filepath.Join(plan.SFTP.Dir, fname)
+	dstPath := filepath.Join(plan.SFTP.BackupDir, fname)
 	sf, err := sftpClient.Create(dstPath)
 	if err != nil {
 		return "", errors.Wrapf(err, "SFTP %v:%v creating file %v failed", plan.SFTP.Host, plan.SFTP.Port, dstPath)
@@ -91,6 +93,69 @@ func sftpUpload(file string, plan config.Plan) (string, error) {
 	msg := fmt.Sprintf("SFTP upload finished `%v` -> `%v` Duration: %v",
 		file, dstPath, t2.Sub(t1))
 	return msg, nil
+}
+
+// TODO: replace ssh connection
+func sftpDownload(file string, plan config.Plan) (string, error) {
+	t1 := time.Now()
+	sshCon, err := NewSSHClient(plan)
+	if err != nil {
+		return "", errors.Wrapf(err, "SSH dial to %v:%v failed", plan.SFTP.Host, plan.SFTP.Port)
+	}
+	defer sshCon.session.Close()
+
+	sftpClient, err := sftp.NewClient(sshCon.client)
+	if err != nil {
+		return "", errors.Wrapf(err, "SFTP client init %v:%v failed", plan.SFTP.Host, plan.SFTP.Port)
+	}
+	defer sftpClient.Close()
+
+	f, err := os.Open(file)
+	if err != nil {
+		return "", errors.Wrapf(err, "Opening file %v failed", file)
+	}
+	defer f.Close()
+
+	_, fname := filepath.Split(file)
+	dstPath := filepath.Join(plan.SFTP.RestoreDir, fname)
+	df, err := sftpClient.Create(dstPath)
+	if err != nil {
+		return "", errors.Wrapf(err, "SFTP creating file %v failed", dstPath)
+	}
+	defer df.Close()
+
+	_, err = df.ReadFrom(f)
+	if err != nil {
+		return "", errors.Wrapf(err, "SFTP download file %v failed", dstPath)
+	}
+
+	//listSftpBackups(sftpClient, plan.SFTP.Dir)
+
+	t2 := time.Now()
+	msg := fmt.Sprintf("SFTP download finished `%v` -> `%v` Duration: %v",
+		file, dstPath, t2.Sub(t1))
+	return msg, nil
+}
+
+func newestFile(dir string) (string, error) {
+	files, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return "", errors.Wrapf(err, "Failed to read dir '%v", dir)
+	}
+	var newestFile string
+	var newestTime int64
+	for _, f := range files {
+		fi, err := os.Stat(dir + f.Name())
+		if err != nil {
+			return "", errors.Wrapf(err, "Failed to stat '%v", f.Name)
+		}
+		currTime := fi.ModTime().Unix()
+		if currTime > newestTime {
+			newestTime = currTime
+			newestFile = f.Name()
+		}
+	}
+	return newestFile, nil
 }
 
 func listSftpBackups(client *sftp.Client, dir string) error {

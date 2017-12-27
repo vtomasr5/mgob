@@ -60,11 +60,12 @@ type S3 struct {
 }
 
 type SFTP struct {
-	Dir      string `yaml:"dir"`
-	Host     string `yaml:"host"`
-	Password string `yaml:"password"`
-	Port     int    `yaml:"port"`
-	Username string `yaml:"username"`
+	BackupDir  string `yaml:"backupdir"`
+	RestoreDir string `yaml:"restoredir"`
+	Host       string `yaml:"host"`
+	Password   string `yaml:"password"`
+	Port       int    `yaml:"port"`
+	Username   string `yaml:"username"`
 }
 
 type SMTP struct {

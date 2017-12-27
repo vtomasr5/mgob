@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/codeskyblue/go-sh"
+	sh "github.com/codeskyblue/go-sh"
 	"github.com/pkg/errors"
 	"github.com/vtomasr5/mgob/config"
 )
@@ -16,6 +16,7 @@ func Run(plan config.Plan, tmpPath string, storagePath string) (Result, error) {
 	t1 := time.Now()
 	planDir := fmt.Sprintf("%v/%v", storagePath, plan.Name)
 
+	// TODO: Add support for backup ALL shards
 	archive, log, err := dump(plan, tmpPath, t1.UTC())
 	res := Result{
 		Plan:      plan.Name,
