@@ -3,7 +3,6 @@ package backup
 import (
 	"fmt"
 	"io"
-	"net"
 	"os"
 	"path/filepath"
 	"time"
@@ -14,25 +13,54 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
-func sftpUpload(file string, plan config.Plan) (string, error) {
-	t1 := time.Now()
+// SSHClient contains the client and the session for an SSH Connection
+type SSHClient struct {
+	client  *ssh.Client
+	session *ssh.Session
+}
+
+// NewSSHClient returns a SSH Client struct that contains the Client and the Session
+func NewSSHClient(plan config.Plan) (*SSHClient, error) {
 	sshConf := &ssh.ClientConfig{
 		User: plan.SFTP.Username,
 		Auth: []ssh.AuthMethod{
 			ssh.Password(plan.SFTP.Password),
 		},
-		HostKeyCallback: func(hostname string, remote net.Addr, key ssh.PublicKey) error {
-			return nil
-		},
+		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
+	cli, err := ssh.Dial("tcp", fmt.Sprintf("%v:%v", plan.SFTP.Host, plan.SFTP.Port), sshConf)
+	if err != nil {
+		return nil, errors.Wrapf(err, "SSH dial to %v:%v failed", plan.SFTP.Host, plan.SFTP.Port)
+	}
+	sess, err := cli.NewSession()
+	if err != nil {
+		return nil, errors.Wrapf(err, "SFTP client init %v:%v failed", plan.SFTP.Host, plan.SFTP.Port)
+	}
+	sshCli := &SSHClient{
+		client:  cli,
+		session: sess,
+	}
+	return sshCli, err
+}
 
-	sshCon, err := ssh.Dial("tcp", fmt.Sprintf("%v:%v", plan.SFTP.Host, plan.SFTP.Port), sshConf)
+// Command executes a command through an SSH connection
+func (s SSHClient) Command(cmd string) error {
+	err := s.session.Run(cmd)
+	if err != nil {
+		return errors.Wrapf(err, "Failed to run ssh command %v", err)
+	}
+	return nil
+}
+
+func sftpUpload(file string, plan config.Plan) (string, error) {
+	t1 := time.Now()
+	sshCon, err := NewSSHClient(plan)
 	if err != nil {
 		return "", errors.Wrapf(err, "SSH dial to %v:%v failed", plan.SFTP.Host, plan.SFTP.Port)
 	}
-	defer sshCon.Close()
+	defer sshCon.session.Close()
 
-	sftpClient, err := sftp.NewClient(sshCon)
+	sftpClient, err := sftp.NewClient(sshCon.client)
 	if err != nil {
 		return "", errors.Wrapf(err, "SFTP client init %v:%v failed", plan.SFTP.Host, plan.SFTP.Port)
 	}
