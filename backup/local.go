@@ -11,26 +11,21 @@ import (
 	"github.com/vtomasr5/mgob/config"
 )
 
-func getURIHost(plan config.Plan) string {
+func getURIHost(plan config.Plan, clusterType string) string {
 	var host string
-	if plan.Target.Type == "sharding" {
+	if plan.Target.Type == clusterType {
 		host = strings.Join(plan.Target.Backup.Host.Mongos, ",")
 	}
-	if plan.Target.Type == "replicaset" {
+	if plan.Target.Type == clusterType {
 		host = strings.Join(plan.Target.Backup.Host.Mongod, ",")
 	}
-	if plan.Target.Type == "standalone" {
+	if plan.Target.Type == clusterType {
 		host = plan.Target.Backup.Host.Mongod[0]
 	}
 	return host
 }
 
-func dump(plan config.Plan, tmpPath string, ts time.Time) (string, string, error) {
-	archive := fmt.Sprintf("%v/%v-%v.gz", tmpPath, plan.Name, ts.Format("2006-01-02T15:04:05"))
-	log := fmt.Sprintf("%v/%v-%v.log", tmpPath, plan.Name, ts.Format("2006-01-02T15:04:05"))
-
-	host := getURIHost(plan)
-
+func _dump(plan config.Plan, archive, host string) ([]byte, error) {
 	dump := fmt.Sprintf("mongodump --archive=%v --gzip --host %v ", archive, host)
 	if plan.Target.Backup.Database != "" {
 		dump += fmt.Sprintf("--db %v ", plan.Target.Backup.Database)
@@ -45,9 +40,70 @@ func dump(plan config.Plan, tmpPath string, ts time.Time) (string, string, error
 		if len(output) > 0 {
 			ex = strings.Replace(string(output), "\n", " ", -1)
 		}
-		return "", "", errors.Wrapf(err, "mongodump log %v", ex)
+		return nil, errors.Wrapf(err, "mongodump log %v", ex)
 	}
-	logToFile(log, output)
+	return output, nil
+}
+
+func dump(plan config.Plan, tmpPath string, ts time.Time) (string, string, error) {
+	archive := fmt.Sprintf("%v/%v-%v.gz", tmpPath, plan.Name, ts.Format("2006-01-02T15:04:05"))
+	log := fmt.Sprintf("%v/%v-%v.log", tmpPath, plan.Name, ts.Format("2006-01-02T15:04:05"))
+
+	if plan.Target.Type == "sharding" {
+		mc := NewMongoClient(plan.Target.Backup.Host.Mongos[0])
+		// stop balancer
+		err := mc.BalancerStop()
+		if err != nil {
+			return "", "", errors.Wrapf(err, "failed stoping the mongos balancer")
+		}
+
+		// backup mongoc
+		for _, host := range plan.Target.Backup.Host.Mongoc {
+			output, err := _dump(plan, archive, host)
+			if err != nil {
+				return "", "", errors.Wrapf(err, "mongodump failed")
+			}
+			logToFile(log, output)
+		}
+
+		// backup shards (mongod)
+		for _, host := range plan.Target.Backup.Host.Mongod {
+			output, err := _dump(plan, archive, host)
+			if err != nil {
+				return "", "", errors.Wrapf(err, "mongodump failed")
+			}
+			logToFile(log, output)
+		}
+
+		// start balancer
+		err = mc.BalancerStart()
+		if err != nil {
+			return "", "", errors.Wrapf(err, "failed starting the mongos balancer")
+		}
+
+		// check if started
+		err = mc.BalancerStatus()
+		if err != nil {
+			return "", "", errors.Wrapf(err, "failed checking the mongos balancer")
+		}
+	} else if plan.Target.Type == "replicaset" {
+		for _, host := range plan.Target.Backup.Host.Mongod {
+			output, err := _dump(plan, archive, host)
+			if err != nil {
+				return "", "", errors.Wrapf(err, "mongodump failed")
+			}
+			logToFile(log, output)
+		}
+	} else if plan.Target.Type == "standalone" {
+		host := plan.Target.Type
+		output, err := _dump(plan, archive, host)
+		if err != nil {
+			return "", "", errors.Wrapf(err, "mongodump failed")
+		}
+		logToFile(log, output)
+	} else {
+		return "", "", errors.New("target type not compatible")
+	}
 
 	return archive, log, nil
 }
